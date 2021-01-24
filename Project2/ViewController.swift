@@ -14,7 +14,7 @@ class ViewController: UIViewController {
     var countries = [String]()
     var score = 0
     var correctAnswer = 0
-    var totalTentatives = 0
+    var totalTentatives = 1
     
     
     lazy var countryTitle: UILabel = {
@@ -127,13 +127,14 @@ class ViewController: UIViewController {
             title = "Wrong, that's flag from \(countries[sender.tag])"
             score -= 1
         }
+    
         
-        totalTentatives += 1
         
         if(totalTentatives == 10) {
-            let ac = UIAlertController(title: title, message: "Seu placar final foi: \(score)", preferredStyle: .alert)
-            ac.addAction(UIAlertAction(title: "Finish", style: .cancel, handler: askQuestion))
+            let ac = UIAlertController(title: title, message: "Your final score is: \(score)", preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "Finish", style: .default, handler: askQuestion))
             score = 0
+            totalTentatives = 0
             present(ac, animated: true)
         } else {
             let ac = UIAlertController(title: title, message: "Your score is \(score).", preferredStyle: .alert)
@@ -141,13 +142,13 @@ class ViewController: UIViewController {
             present(ac, animated: true)
         }
         
+        totalTentatives += 1
+        
     }
    
 }
 
 extension UINavigationItem {
-
-
 
      func setTitle(title:String, subtitle:String) {
 
