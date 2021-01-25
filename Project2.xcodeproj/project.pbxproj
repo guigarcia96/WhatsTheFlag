@@ -58,11 +58,11 @@
 		C494C36325BB745A0024347A /* Project2 */ = {
 			isa = PBXGroup;
 			children = (
-				C494C38B25BF045F0024347A /* ViewController */,
 				C494C38625BE25710024347A /* Model */,
 				C494C38025BE24830024347A /* ViewModel */,
 				C494C37B25BE1E6C0024347A /* Components */,
 				C494C36425BB745A0024347A /* AppDelegate.swift */,
+				C494C36825BB745A0024347A /* ViewController.swift */,
 				C494C36D25BB745C0024347A /* Assets.xcassets */,
 				C494C36F25BB745C0024347A /* LaunchScreen.storyboard */,
 				C494C37225BB745C0024347A /* Info.plist */,
@@ -92,14 +92,6 @@
 				C494C38725BE25810024347A /* Countries.swift */,
 			);
 			path = Model;
-			sourceTree = "<group>";
-		};
-		C494C38B25BF045F0024347A /* ViewController */ = {
-			isa = PBXGroup;
-			children = (
-				C494C36825BB745A0024347A /* ViewController.swift */,
-			);
-			path = ViewController;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
