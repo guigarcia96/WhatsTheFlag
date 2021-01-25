@@ -11,15 +11,17 @@ class ViewController: UIViewController {
     
     var safeArea: UILayoutGuide!
     
-    var countries = [String]()
     var score = 0
     var correctAnswer = 0
     var totalTentatives = 1
-    
+    var countries = [String]()
+        
     var flagButton1 = Components().flagButton1
     var flagButton2 = Components().flagButton2
     var flagButton3 = Components().flagButton3
     var countryTitle = Components().countryTitle
+
+    var countriesViewModel = CountriesViewModel(title: "", score: 0, totalTentatives: 0, correctAnswer: 0)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,8 +29,7 @@ class ViewController: UIViewController {
         
         view.backgroundColor = .white
         safeArea = view.layoutMarginsGuide
-        
-        populateCountries()
+        navigationItem.setTitle(title: "Guilherme", subtitle: "Score: \(countriesViewModel.score)" )
         askQuestion()
         addingSubViews()
         setupConstraints()
@@ -50,21 +51,18 @@ class ViewController: UIViewController {
         
     }
     
-    func populateCountries() {
-        countries += ["Estonia", "France", "Germany", "Ireland", "Italy", "Monaco", "Nigeria", "Poland", "Russia", "Spain", "UK", "US"]
-    }
     
     //metodo é chamado tanto no começo, tanto quando a alert view é finalizada, por isso isso o UIAlerctAcion como padrão para nil para que seja usado sem problemas no viewdidload
     func askQuestion(action: UIAlertAction! = nil) {
         
-        countries.shuffle()
-        correctAnswer = Int.random(in: 0...2)
-        countryTitle.text = countries[correctAnswer]
-        navigationItem.setTitle(title: "Guilherme", subtitle: "Score: \(score)" )
+        let countries = countriesViewModel.getCountriesName()
+        let asnwer = countriesViewModel.getCorrectAnswerPath()
+        countryTitle.text = countries[asnwer]
+        navigationItem.setTitle(title: "Guilherme", subtitle: "Score: \(countriesViewModel.score)" )
         
-        flagButton1.setImage(UIImage(named: countries[0]), for: .normal)
-        flagButton2.setImage(UIImage(named: countries[1]), for: .normal)
-        flagButton3.setImage(UIImage(named: countries[2]), for: .normal)
+        flagButton1.setImage(UIImage(named: countriesViewModel.getCountriesName()[0]), for: .normal)
+        flagButton2.setImage(UIImage(named: countriesViewModel.getCountriesName()[1]), for: .normal)
+        flagButton3.setImage(UIImage(named: countriesViewModel.getCountriesName()[2]), for: .normal)
     }
     
     func setupConstraints() {
@@ -90,29 +88,22 @@ class ViewController: UIViewController {
     }
     
     @objc func buttonTapped(sender: UIButton!) {
-        var title: String
         
-        if sender.tag == correctAnswer {
-            title = "Correct"
-            score += 1
-        } else {
-            title = "Wrong, that's flag from \(countries[sender.tag])"
-            score -= 1
-        }
+        countriesViewModel.getCorrectAnswer(senderValue: sender.tag)
         
-        if(totalTentatives == 10) {
-            let ac = UIAlertController(title: title, message: "Your final score is: \(score)", preferredStyle: .alert)
+        if(countriesViewModel.totalTentatives == 10) {
+            let ac = UIAlertController(title: countriesViewModel.title, message: "Your final score is: \(countriesViewModel.score)", preferredStyle: .alert)
             ac.addAction(UIAlertAction(title: "Try Again", style: .default, handler: askQuestion))
             score = 0
             totalTentatives = 0
             present(ac, animated: true)
         } else {
-            let ac = UIAlertController(title: title, message: "Your score is \(score).", preferredStyle: .alert)
+            let ac = UIAlertController(title: countriesViewModel.title, message: "Your score is \(countriesViewModel.score).", preferredStyle: .alert)
             ac.addAction(UIAlertAction(title: "Continue", style: .default, handler: askQuestion))
             present(ac, animated: true)
         }
         
-        totalTentatives += 1
+        
         
     }
     
