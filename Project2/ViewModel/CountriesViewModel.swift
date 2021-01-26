@@ -19,13 +19,29 @@ struct CountriesViewModel {
     
     var totalTentatives:Int
     
-    var correctAnswer: Int
+    var correctAnswer:Int
     
-    func getCountriesName() -> [String] {
-        return name.shuffled()
+  
+    mutating func getCountriesName() -> [String] {
+        name.shuffle()
+        return name
+    }
+    
+    mutating func getRandomValue() -> Int {
+        correctAnswer = Int.random(in: 0...2)
+        return correctAnswer
+    }
+    
+    mutating func setTotalTentativesToZero() {
+        totalTentatives = 0
+    }
+    
+    mutating func setScoreToZero() {
+        score = 0
     }
     
     mutating func getCorrectAnswer(senderValue: Int) {
+        
         if senderValue == correctAnswer {
             title = "Correct"
             score += 1
@@ -36,12 +52,6 @@ struct CountriesViewModel {
         totalTentatives += 1
     }
     
-    mutating func getCorrectAnswerPath() -> Int {
-        correctAnswer = Int.random(in: 0...2)
-        return correctAnswer
-    }
-    
-
     mutating func getTotalTentatives() -> Int {
         return totalTentatives
     }

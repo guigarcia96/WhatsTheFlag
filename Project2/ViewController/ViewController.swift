@@ -30,10 +30,11 @@ class ViewController: UIViewController {
         view.backgroundColor = .white
         safeArea = view.layoutMarginsGuide
         navigationItem.setTitle(title: "Guilherme", subtitle: "Score: \(countriesViewModel.score)" )
-        askQuestion()
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(shareTapped))
         addingSubViews()
         setupConstraints()
         setupButtonsActions()
+        askQuestion()
         
     }
     
@@ -50,19 +51,20 @@ class ViewController: UIViewController {
         view.addSubview(flagButton3)
         
     }
-    
+
     
     //metodo é chamado tanto no começo, tanto quando a alert view é finalizada, por isso isso o UIAlerctAcion como padrão para nil para que seja usado sem problemas no viewdidload
     func askQuestion(action: UIAlertAction! = nil) {
-        
-        let countries = countriesViewModel.getCountriesName()
-        let asnwer = countriesViewModel.getCorrectAnswerPath()
-        countryTitle.text = countries[asnwer]
+        countries = countriesViewModel.getCountriesName()
+        correctAnswer = countriesViewModel.getRandomValue()
+        countryTitle.text = countries[correctAnswer]
         navigationItem.setTitle(title: "Guilherme", subtitle: "Score: \(countriesViewModel.score)" )
         
-        flagButton1.setImage(UIImage(named: countriesViewModel.getCountriesName()[0]), for: .normal)
-        flagButton2.setImage(UIImage(named: countriesViewModel.getCountriesName()[1]), for: .normal)
-        flagButton3.setImage(UIImage(named: countriesViewModel.getCountriesName()[2]), for: .normal)
+        flagButton1.setImage(UIImage(named: countries[0]), for: .normal)
+        flagButton2.setImage(UIImage(named: countries[1]), for: .normal)
+        flagButton3.setImage(UIImage(named: countries[2]), for: .normal)
+        
+        
     }
     
     func setupConstraints() {
@@ -91,11 +93,11 @@ class ViewController: UIViewController {
         
         countriesViewModel.getCorrectAnswer(senderValue: sender.tag)
         
-        if(countriesViewModel.totalTentatives == 10) {
+        if(countriesViewModel.getTotalTentatives() == 10) {
             let ac = UIAlertController(title: countriesViewModel.title, message: "Your final score is: \(countriesViewModel.score)", preferredStyle: .alert)
             ac.addAction(UIAlertAction(title: "Try Again", style: .default, handler: askQuestion))
-            score = 0
-            totalTentatives = 0
+            countriesViewModel.setScoreToZero()
+            countriesViewModel.setTotalTentativesToZero()
             present(ac, animated: true)
         } else {
             let ac = UIAlertController(title: countriesViewModel.title, message: "Your score is \(countriesViewModel.score).", preferredStyle: .alert)
@@ -105,6 +107,15 @@ class ViewController: UIViewController {
         
         
         
+    }
+    
+    @objc func shareTapped() {
+        
+        let text = "My Score is \(countriesViewModel.score) in What's The Flag"
+        
+        let vc = UIActivityViewController(activityItems: [text], applicationActivities: [])
+                vc.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItem
+                present(vc, animated: true)
     }
     
 }
